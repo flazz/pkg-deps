@@ -1,0 +1,4 @@
+#! /bin/sh
+
+cd $GOROOT/src
+find . -type d | grep -v internal | sed -e 's|./||'
