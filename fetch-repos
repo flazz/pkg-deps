@@ -1,0 +1,10 @@
+#! /bin/sh
+
+export CORPUS=`pwd`/corpus
+mkdir -p $CORPUS/repos
+cd $CORPUS/repos
+
+while read pkg
+do
+  git clone "https://$pkg.git"
+done

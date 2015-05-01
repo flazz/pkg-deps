@@ -1,0 +1,21 @@
+#! /bin/bash
+
+export CORPUS=`pwd`/corpus
+mkdir -p $CORPUS/repos
+cd $CORPUS/repos
+
+for r in *
+do
+  (
+  cd $r
+  pkg=$(git config --get remote.origin.url | sed -e 's|^https://||' -e 's|.git$||')
+  export GOPATH=$CORPUS
+  echo searching $pkg
+  find . -type f -name \*.go | xargs -n1 dirname | uniq | grep -v Godeps | sed -e "s|^.|$pkg|" | while read p
+    do
+      echo getting $p
+      go get "$p"
+    done
+  echo
+  )
+done
