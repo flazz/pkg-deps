@@ -5,42 +5,50 @@ import (
 	"go/parser"
 	"go/token"
 	"os"
+	"sort"
 	"strings"
 )
 
 func main() {
-	set := make(map[string][]string)
+	set := make([]string, 100)
 
-	p := os.Args[1]
-	if len(os.Args) == 1 {
-		fmt.Print("usage: " + os.Args[0] + " PKG")
+	if len(os.Args) != 2 {
+		fmt.Println("usage: " + os.Args[0] + " [PKG|DIR]")
 		os.Exit(1)
+	}
+
+	pkgSpec := os.Args[1]
+	var pkgPath string
+	switch pkgSpec[0] {
+	case '.', '/':
+		pkgPath = pkgSpec
+	default:
+		pkgPath = os.Getenv("GOPATH") + "/src/" + pkgSpec
 	}
 
 	fset := token.NewFileSet()
-	pkgs, err := parser.ParseDir(fset, p, nil, parser.ImportsOnly)
+	pkgs, err := parser.ParseDir(fset, pkgPath, nil, parser.ImportsOnly)
 	if err != nil {
-		fmt.Print(err)
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	for pkgName, pkg := range pkgs {
+	for _, pkg := range pkgs {
 		for _, f := range pkg.Files {
 			for _, imp := range f.Imports {
 				impName := imp.Path.Value
-				if !contains(set[pkgName], impName) {
-					set[pkgName] = append(set[pkgName], impName)
+				if !contains(set, impName) {
+					set = append(set, impName)
 				}
 			}
 		}
 	}
 
-	for _, imps := range set {
-		for _, imp := range imps {
-			a := strings.TrimPrefix(imp, "\"")
-			b := strings.TrimSuffix(a, "\"")
-			fmt.Println(b)
-		}
+	sort.Strings(set)
+	for _, imp := range set {
+		a := strings.TrimPrefix(imp, "\"")
+		b := strings.TrimSuffix(a, "\"")
+		fmt.Println(b)
 	}
 }
 
