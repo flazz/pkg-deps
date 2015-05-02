@@ -1,4 +1,0 @@
-#! /bin/sh -e
-
-cd $GOPATH/src
-find . -type d -name \.git | xargs -n1 dirname | sed -e 's|./||'

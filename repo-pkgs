@@ -1,4 +1,0 @@
-#! /bin/sh
-
-cd $GOPATH/src/$1
-find . -type f -name \*.go | xargs -n1 dirname | sed -e "s|^.|$1|" | uniq
