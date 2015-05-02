@@ -1,16 +1,10 @@
 #! /bin/sh
 
-if [ ! -d "$CORPUS" ]
-then
-	echo CORPUS is not a directory
-	exit 1
-fi
-
 while read p
 do
 	(
-	export GOPATH=$CORPUS 
+	export GOPATH=`pwd`/var/go
 	cd $GOPATH
 	go get "$p"
 	)
-done < "$CORPUS/packages"
+done < packages/seed

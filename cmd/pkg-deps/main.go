@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	set := make([]string, 100)
+	set := make([]string, 0)
 
 	if len(os.Args) != 2 {
 		fmt.Println("usage: " + os.Args[0] + " [PKG|DIR]")

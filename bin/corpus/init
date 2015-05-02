@@ -1,4 +1,4 @@
 #! /bin/sh
 
-mkdir -p var/corpus
-cp packages/popular /var/packages
+mkdir -p var/go
+cp packages/seed var/packages
