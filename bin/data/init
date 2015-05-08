@@ -6,14 +6,10 @@ do
   bin/data/load-seed $p
 done < var/packages
 
-echo loading deps
+echo loading recursive deps
 bin/data/seed | while read p
 do
   bin/data/load-deps $p
 done
 
-#echo loading transients
-#bin/data/non-stdlib | while read p
-#do
-  #bin/data/load-deps $p
-#done
+echo connect direct deps

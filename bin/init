@@ -1,11 +1,11 @@
-#! /bin/sh
+#! /bin/sh -e
 
 nqdb=var/data.nq
 
 echo seeding corpus
 bin/corpus/init
 bin/corpus/get
-bin/corpus/seed-nq > $nqdb
 
 echo installing graph db
 go get github.com/google/cayley/cmd/cayley
+cayley init --db=leveldb --dbpath=var/data

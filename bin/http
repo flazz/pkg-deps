@@ -3,4 +3,4 @@
 nqdb=var/data.nq
 
 echo starting graph db
-exec cayley http --dbpath=$nqdb --host=0.0.0.0
+exec cayley http --host=0.0.0.0 --db=leveldb --dbpath=var/data --logtostderr
