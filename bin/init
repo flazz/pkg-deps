@@ -6,6 +6,8 @@ then
   exit 1
 fi
 
+mkdir var
+
 export GOPATH=`pwd`/var/go
 echo "go get seed"
 go get $(paste -s packages/seed)
@@ -13,16 +15,21 @@ go get $(paste -s packages/seed)
 echo "pkg csv"
 pkg_csv=var/pkgs.csv
 echo path,name,stdlib > $pkg_csv
+go list -f '{{ .ImportPath }},{{ .Name }},{{ .Standard }}' std >> $pkg_csv
 go list -f '{{ .ImportPath }},{{ .Name }},{{ .Standard }}' ./var/go/src/... | sed -e "s|^_$HOME||" >> $pkg_csv
 
 echo "imports csv"
 imports_csv=var/imports.csv
-go list ./var/go/src/... | sed -e "s|^_$HOME||" | while read p
+go list std >> var/pkgs
+go list ./var/go/src/... | sed -e "s|^_$HOME||" >> var/pkgs
+
+while read p
 do
   go list -f '{{ join .Imports "\n" }}' $p | while read d
   do
     echo "$p,$d"
   done
-done > $imports_csv
+done > $imports_csv < var/pkgs
 
+echo "loading data"
 $NEO4J/bin/neo4j-shell -file dataset.cypher
