@@ -1,0 +1,20 @@
+#! /bin/sh
+
+export GOPATH=`pwd`/var/go
+echo "go get seed"
+go get $(paste -s packages/seed)
+
+echo "pkg csv"
+pkg_csv=var/pkgs.csv
+echo path,name,stdlib > $pkg_csv
+go list -f '{{ .ImportPath }},{{ .Name }},{{ .Standard }}' ./var/go/src/... | sed -e "s|^_$HOME||" >> $pkg_csv
+
+echo "imports csv"
+imports_csv=var/imports.csv
+go list ./var/go/src/... | sed -e "s|^_$HOME||" | while read p
+do
+  go list -f '{{ join .Imports "\n" }}' $p | while read d
+  do
+    echo "$p,$d"
+  done
+done > $imports_csv
