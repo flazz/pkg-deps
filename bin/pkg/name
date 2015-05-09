@@ -1,4 +1,0 @@
-#! /bin/sh
-
-cd $GOPATH/src/$1
-exec awk '/^package/ { print $2; exit }' *.go

@@ -1,6 +1,0 @@
-#! /bin/sh
-
-nqdb=var/data.nq
-
-echo starting graph db
-exec cayley http --host=0.0.0.0 --db=leveldb --dbpath=var/data --logtostderr

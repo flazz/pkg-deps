@@ -1,5 +1,10 @@
 #! /bin/sh
 
+if [ -d "$NEO4J" ]
+  echo "NEO4J not set to a dir"
+  exit 1
+fi
+
 export GOPATH=`pwd`/var/go
 echo "go get seed"
 go get $(paste -s packages/seed)
@@ -18,3 +23,5 @@ do
     echo "$p,$d"
   done
 done > $imports_csv
+
+$NEO4J/bin/neo4j-shell -file dataset.cypher
