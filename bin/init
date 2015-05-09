@@ -1,7 +1,8 @@
 #! /bin/sh
 
-if [ -d "$NEO4J" ]
-  echo "NEO4J not set to a dir"
+if [ -z "$NEO4J" ]
+then
+  echo "unset NEO4J"
   exit 1
 fi
 
